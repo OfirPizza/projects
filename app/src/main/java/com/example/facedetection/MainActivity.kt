@@ -10,15 +10,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener,
-    BottomNavigationView.OnNavigationItemReselectedListener {
-    override fun onNavigationItemReselected(item: MenuItem) {
-    }
-
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        return true
-
-    }
+class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +20,6 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
     private fun initBottomNavigationController() {
         this.bottom_navigation_view.setOnNavigationItemSelectedListener { navigate(it.itemId) }
-
     }
 
 
