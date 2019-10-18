@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home_nev_graph"
+    app:startDestination="@id/navigation_all">
+
+
+    <fragment
+        android:id="@+id/navigation_all"
+        android:name="com.example.facedetection.allImages.AllImagesFragment"
+        android:label="fragment_all"
+        tools:layout="@layout/fragment_all" />
+    <fragment
+        android:id="@+id/navigation_faces"
+        android:name="com.example.facedetection.facesimages.FacesImagesFragment"
+        android:label="FacesImagesFragment" />
+    <fragment
+        android:id="@+id/navigation_no_faces"
+        android:name="com.example.facedetection.noFacesImages.NoFacesImagesFragment"
+        android:label="NoFacesImagesFragment" />
+</navigation>
