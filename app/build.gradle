@@ -63,4 +63,10 @@ dependencies {
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.9.1'
 
+    //face detection
+    implementation 'com.google.firebase:firebase-ml-vision:24.0.0'
+    implementation 'com.google.firebase:firebase-ml-vision-face-model:19.0.0'
+    implementation 'com.google.firebase:firebase-core:17.2.0'
+
 }
+apply plugin: 'com.google.gms.google-services'

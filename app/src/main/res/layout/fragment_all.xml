@@ -13,6 +13,14 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/btn_detect"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        android:text="@string/detect"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/all_images_rv"

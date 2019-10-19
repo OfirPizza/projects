@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.facedetection.allImages.model.ImageUiModel
-import com.example.facedetection.network.NetworkManager
+import com.example.facedetection.managers.DataManager
 import com.example.facedetection.network.model.ImageResponse
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
@@ -19,7 +19,7 @@ class AllImagesViewModel : ViewModel() {
 
 
     fun getAllImages() {
-        disposable = NetworkManager.INSTANCE.getAllImages()
+        disposable = DataManager.INSTANCE.getAllImages()
             .subscribeOn(Schedulers.io())
             .subscribeBy(
                 onError = { postImageListFailed(it) },
@@ -39,6 +39,13 @@ class AllImagesViewModel : ViewModel() {
     override fun onCleared() {
         super.onCleared()
         disposable.dispose()
+    }
+
+    fun startDetection() {
+        imageListLiveData.value?.let {
+            val list = it.map { it.imageUrl }
+            DataManager.INSTANCE.detectImages(list)
+        }
     }
 
 
