@@ -1,21 +1,39 @@
 package com.example.facedetection
 
 import android.os.Bundle
-import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.NavDestination
-import androidx.navigation.Navigation
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
-import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.facedetection.dialog.ResultsDialogFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var mainActivityViewModel: MainActivityViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        initViewModel()
         initBottomNavigationController()
+    }
+
+    private fun initViewModel() {
+        mainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel::class.java)
+        setObservers()
+    }
+
+    private fun setObservers() {
+        mainActivityViewModel.getDetectionStatusLiveData().observe(this, Observer { onDetectionStatusChanged(it)})
+    }
+
+    private fun onDetectionStatusChanged(isStartDetection: Boolean) {
+        if (!isStartDetection){
+            showDialog()
+        }
+
+
     }
 
     private fun initBottomNavigationController() {
@@ -29,5 +47,13 @@ class MainActivity : AppCompatActivity() {
             navigate(id)
         }
         return true
+    }
+
+
+    private fun showDialog() {
+        ResultsDialogFragment().show(
+            supportFragmentManager,
+            ResultsDialogFragment::class.java.simpleName
+        )
     }
 }

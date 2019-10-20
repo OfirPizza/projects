@@ -46,6 +46,12 @@ class FaceDetectorManager {
                 isTaskDone = true
                 i++
             }
+
+            detectFaceInImage.addOnFailureListener {
+                imgWithoutFace.add(bitmapList[i])
+                isTaskDone = true
+                i++
+            }
         }
 
         postResults(imgWithFace, imgWithoutFace)
