@@ -16,10 +16,10 @@ interface NetworkApi {
 
     @Headers(CONTENT_TYPE, API_KEY)
     @GET("search")
-    fun getAllImages(
+    fun getImagesByPage(
         @Query("query") query: String? = "football",
-        @Query("per_page") perPage: String? = "100",
-        @Query("page") page: String? = "1"
+        @Query("per_page") perPage: String? = "50",
+        @Query("page") page: Int? = 1
     ): Single<ImageResponse>
 
 

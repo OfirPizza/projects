@@ -10,9 +10,9 @@ import com.example.facedetection.R
 import com.example.facedetection.allImages.model.ImageUiModel
 import kotlinx.android.synthetic.main.list_image_item.view.*
 
-class ImagesAdapter(private val data: List<ImageUiModel>) :
+class ImagesAdapter :
     RecyclerView.Adapter<ImagesAdapter.ImagesViewHolder>() {
-
+    val data = arrayListOf<ImageUiModel>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImagesViewHolder {
         val view =

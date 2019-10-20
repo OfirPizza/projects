@@ -23,8 +23,8 @@ class DataManager {
     }
 
 
-    fun getAllImages(): Single<ImageResponse> {
-        return NetworkManager.INSTANCE.getAllImages()
+    fun getImagesByPage(pageNum: Int): Single<ImageResponse> {
+        return NetworkManager.INSTANCE.getImagesByPage(pageNum)
     }
 
 
@@ -53,7 +53,7 @@ class DataManager {
     }
 
     private fun onFailed(message: String?) {
-        Log.e(TAG, message)
+        Log.e(TAG, message.toString())
     }
 
 }

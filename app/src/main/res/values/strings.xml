@@ -8,4 +8,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="all_images">All Images</string>
     <string name="detect">Detect</string>
+    <string name="faces_images">Face Images</string>
+    <string name="no_faces_images">No Face Images</string>
 </resources>

@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.facedetection.R
 import com.example.facedetection.allImages.adapter.ImagesAdapter
 import com.example.facedetection.allImages.model.ImageUiModel
@@ -17,7 +18,11 @@ import kotlinx.android.synthetic.main.top_title_fragment.view.*
 
 class AllImagesFragment : Fragment() {
 
-    private lateinit var mAllImagesViewModel: AllImagesViewModel
+    private val MAX_PICTURES = 1000
+    private var pageCounter = 1
+
+    private lateinit var allImagesViewModel: AllImagesViewModel
+    private val adapter: ImagesAdapter = ImagesAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,22 +39,24 @@ class AllImagesFragment : Fragment() {
     }
 
     private fun fetchData() {
-        mAllImagesViewModel.getAllImages()
+        allImagesViewModel.getImagesByPage(pageCounter)
     }
 
     private fun initViewModel() {
-        mAllImagesViewModel = ViewModelProviders.of(this).get(AllImagesViewModel::class.java)
+        allImagesViewModel = ViewModelProviders.of(this).get(AllImagesViewModel::class.java)
         setObservers()
     }
 
     private fun setObservers() {
-        mAllImagesViewModel
+        allImagesViewModel
             .imageListLiveData
             .observe(this, Observer { onImagesReceived(it) })
     }
 
     private fun onImagesReceived(imageList: List<ImageUiModel>) {
-        all_images_rv.adapter = ImagesAdapter(imageList)
+
+        adapter.data.addAll(imageList)
+        adapter.notifyDataSetChanged()
     }
 
     private fun initViews() {
@@ -60,19 +67,42 @@ class AllImagesFragment : Fragment() {
 
     private fun setBtnDetect() {
         btn_detect.setOnClickListener {
-            mAllImagesViewModel.startDetection()
+            allImagesViewModel.startDetection(adapter.data)
         }
     }
 
     private fun setRecycler() {
+        all_images_rv.adapter = adapter
+
         all_images_rv.apply {
             layoutManager = GridLayoutManager(requireContext(), 2)
+            onScrollToEnd(layoutManager as GridLayoutManager) { loadMoreImages() }
+        }
+
+
+    }
+
+    private fun loadMoreImages() {
+        allImagesViewModel.isLoadingLiveData.value?.let {
+            if (it || all_images_rv.layoutManager?.itemCount == MAX_PICTURES) return
+            allImagesViewModel.getImagesByPage(pageCounter++)
         }
     }
 
-    private fun setTitle() {
-        top_title.title.text = getString(R.string.all_images)
-    }
 
+    private fun RecyclerView.onScrollToEnd(
+        gridLayoutManager: GridLayoutManager,
+        onScrollNearEnd: (Unit) -> Unit
+    ) = addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            if (gridLayoutManager.itemCount - 3 == gridLayoutManager.findLastVisibleItemPosition()) {  //if near fifth item from end
+                onScrollNearEnd(Unit)
+            }
+        }
+    })
+
+    private fun setTitle() {
+        top_title_all.title.text = getString(R.string.all_images)
+    }
 
 }

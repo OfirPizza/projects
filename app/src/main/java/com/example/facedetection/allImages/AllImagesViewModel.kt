@@ -14,12 +14,14 @@ class AllImagesViewModel : ViewModel() {
 
     private val TAG = AllImagesViewModel::class.java.simpleName
     val imageListLiveData = MutableLiveData<List<ImageUiModel>>()
+    val isLoadingLiveData = MutableLiveData<Boolean>()
 
     private lateinit var disposable: Disposable
 
 
-    fun getAllImages() {
-        disposable = DataManager.INSTANCE.getAllImages()
+    fun getImagesByPage(pageNum: Int) {
+        postLoading(true)
+        disposable = DataManager.INSTANCE.getImagesByPage(pageNum)
             .subscribeOn(Schedulers.io())
             .subscribeBy(
                 onError = { postImageListFailed(it) },
@@ -28,12 +30,18 @@ class AllImagesViewModel : ViewModel() {
 
     }
 
+    private fun postLoading(isLoading: Boolean) {
+        isLoadingLiveData.postValue(isLoading)
+    }
+
     private fun postImageList(response: ImageResponse) {
+        postLoading(false)
         imageListLiveData.postValue(response.photos.map { ImageUiModel(it.src.imgUrl) })
     }
 
     private fun postImageListFailed(tr: Throwable) {
-        Log.e(TAG, tr.message)
+        postLoading(true)
+        Log.e(TAG, tr.message.toString())
     }
 
     override fun onCleared() {
@@ -41,11 +49,8 @@ class AllImagesViewModel : ViewModel() {
         disposable.dispose()
     }
 
-    fun startDetection() {
-        imageListLiveData.value?.let {
-            val list = it.map { it.imageUrl }
-            DataManager.INSTANCE.detectImages(list)
-        }
+    fun startDetection(data: ArrayList<ImageUiModel>) {
+        DataManager.INSTANCE.detectImages(data.map { it.imageUrl })
     }
 
 

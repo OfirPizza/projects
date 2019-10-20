@@ -13,10 +13,9 @@ class NetworkManager {
     }
 
 
-    fun getAllImages(): Single<ImageResponse> {
-        return RetrofitManager.INSTANCE.getNetworkApi().getAllImages()
+    fun getImagesByPage(pageNum: Int): Single<ImageResponse> {
+        return RetrofitManager.INSTANCE.getNetworkApi().getImagesByPage(page = pageNum)
     }
-
 
 
     fun getImageAsBitmap(imgUrl: String): Bitmap {
