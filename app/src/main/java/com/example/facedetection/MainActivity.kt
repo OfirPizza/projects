@@ -35,7 +35,6 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         removeNotification()
-
     }
 
     private fun removeNotification() {
@@ -45,6 +44,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun onDetectionStatusChanged(isStartDetection: Boolean) {
         if (!isStartDetection) {
+            removeNotification()
             showDialog()
         }
     }

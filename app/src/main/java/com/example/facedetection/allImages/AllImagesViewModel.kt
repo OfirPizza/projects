@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.facedetection.allImages.model.ImageUiModel
 import com.example.facedetection.managers.DataManager
+import com.example.facedetection.managers.FaceDetectorManager
 import com.example.facedetection.network.model.ImageResponse
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
@@ -51,6 +52,10 @@ class AllImagesViewModel : ViewModel() {
 
     fun startDetection(data: ArrayList<ImageUiModel>) {
         DataManager.INSTANCE.detectImages(data.map { it.imageUrl })
+    }
+
+    fun getIsStartedDetectionLiveData(): MutableLiveData<Boolean> {
+        return FaceDetectorManager.INSTANCE.isStartedDetectionLiveData
     }
 
 

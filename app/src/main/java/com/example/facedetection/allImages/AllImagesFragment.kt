@@ -51,6 +51,17 @@ class AllImagesFragment : Fragment() {
         allImagesViewModel
             .imageListLiveData
             .observe(this, Observer { onImagesReceived(it) })
+
+        allImagesViewModel
+            .getIsStartedDetectionLiveData()
+            .observe(this, Observer { onStartedDetection(it) })
+    }
+
+    private fun onStartedDetection(isStartedDetection: Boolean) {
+        if (isStartedDetection) return
+
+        btn_detect.isEnabled = true
+        btn_detect.text = getString(R.string.detect)
     }
 
     private fun onImagesReceived(imageList: List<ImageUiModel>) {
@@ -67,6 +78,8 @@ class AllImagesFragment : Fragment() {
 
     private fun setBtnDetect() {
         btn_detect.setOnClickListener {
+            btn_detect.isEnabled = false
+            btn_detect.text = getString(R.string.processing)
             allImagesViewModel.startDetection(adapter.data)
         }
     }
