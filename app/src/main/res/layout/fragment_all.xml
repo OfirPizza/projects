@@ -19,7 +19,7 @@
         android:id="@+id/btn_detect"
         android:layout_width="150dp"
         android:layout_height="50dp"
-        android:text="@string/detect"
+        tools:text="@string/detect"
         app:layout_constraintTop_toBottomOf="@id/top_title_all"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

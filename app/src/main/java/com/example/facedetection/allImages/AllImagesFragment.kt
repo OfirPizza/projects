@@ -33,8 +33,8 @@ class AllImagesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initViews()
         initViewModel()
+        initViews()
         fetchDataIfNeeded()
     }
 
@@ -74,19 +74,18 @@ class AllImagesFragment : Fragment() {
             return
         }
 
-        resetBtn(true)
+        resetBtn(false)
     }
 
     private fun resetBtn(isInDetectionMode: Boolean) {
-        btn_detect.isEnabled = isInDetectionMode
-        btn_detect.text =
-            if (isInDetectionMode) getString(R.string.detect) else getString(R.string.processing)
+        btn_detect.isEnabled = !isInDetectionMode
+        btn_detect.text = if (!isInDetectionMode) getString(R.string.detect) else getString(R.string.processing)
     }
 
     private fun onStartedDetection(isStartedDetection: Boolean) {
         if (isStartedDetection) return
 
-        resetBtn(true)
+        resetBtn(allImagesViewModel.isInProcess())
     }
 
     private fun onImagesReceived(imageList: List<ImageUiModel>) {
@@ -102,9 +101,12 @@ class AllImagesFragment : Fragment() {
 
     private fun setBtnDetect() {
         btn_detect.setOnClickListener {
-            resetBtn(false)
+            resetBtn(true)
+
             allImagesViewModel.startDetection(adapter.data)
         }
+
+            resetBtn(allImagesViewModel.isInProcess())
     }
 
     private fun setRecycler() {

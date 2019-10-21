@@ -42,7 +42,7 @@ class AllImagesViewModel : ViewModel() {
     }
 
     private fun postImageListFailed(tr: Throwable) {
-        postLoading(true)
+        postLoading(false)
         Log.e(TAG, tr.message.toString())
     }
 
@@ -61,6 +61,14 @@ class AllImagesViewModel : ViewModel() {
 
     fun getIsStartedDetectionLiveData(): MutableLiveData<Boolean> {
         return FaceDetectorManager.INSTANCE.isStartedDetectionLiveData
+    }
+
+    fun isInProcess(): Boolean {
+        var isLoading = false
+        var isStartedConverting = false
+        isLoadingLiveData.value?.let {  isLoading = it }
+        DataManager.INSTANCE.isConvertingImagesLiveData.value?.let { isStartedConverting = it }
+        return isLoading || isStartedConverting
     }
 
 
