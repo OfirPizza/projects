@@ -1,4 +1,4 @@
-package com.example.facedetection.dialog
+package com.example.facedetection.dialog.resultDialog
 
 import androidx.lifecycle.ViewModel
 import com.example.facedetection.managers.FaceDetectorManager
@@ -12,8 +12,8 @@ class ResultsDialogViewModel : ViewModel() {
         FaceDetectorManager.INSTANCE.imagesWithFacesLiveData.value?.let {
             sizeOfFacesFound = it.size
         }
-        FaceDetectorManager.INSTANCE.imagesWithoutFacesLiveData.value?.let {
-            totalSize = it.size + sizeOfFacesFound
+        FaceDetectorManager.INSTANCE.totalImagesProcessedLiveData.value?.let {
+            totalSize = it
         }
 
         return "Found ${sizeOfFacesFound} from ${totalSize}"

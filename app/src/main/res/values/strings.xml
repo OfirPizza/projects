@@ -11,5 +11,5 @@
     <string name="faces_images">Face Images</string>
     <string name="no_faces_images">No Face Images</string>
     <string name="ok">OK</string>
-    <string name="processing">PROCESSING...</string>
+    <string name="processing">PROCESSING…</string>
 </resources>

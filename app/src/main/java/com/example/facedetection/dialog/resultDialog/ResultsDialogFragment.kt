@@ -1,4 +1,4 @@
-package com.example.facedetection.dialog
+package com.example.facedetection.dialog.resultDialog
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -22,11 +22,9 @@ class ResultsService : Service() {
     private lateinit var liveData: MutableLiveData<Boolean>
 
 
-
     override fun onBind(intent: Intent?): IBinder? {
         return null
     }
-
 
 
     override fun onCreate() {
@@ -58,10 +56,6 @@ class ResultsService : Service() {
     }
 
     private fun showResults() {
-        updateNotification()
-    }
-
-    private fun updateNotification() {
         startForeground(1, createNotification(getResultsText()))
     }
 
@@ -72,8 +66,8 @@ class ResultsService : Service() {
         FaceDetectorManager.INSTANCE.imagesWithFacesLiveData.value?.let {
             sizeOfFacesFound = it.size
         }
-        FaceDetectorManager.INSTANCE.imagesWithoutFacesLiveData.value?.let {
-            totalSize = it.size + sizeOfFacesFound
+        FaceDetectorManager.INSTANCE.totalImagesProcessedLiveData.value?.let {
+            totalSize = it
         }
 
         return "Found $sizeOfFacesFound from $totalSize"

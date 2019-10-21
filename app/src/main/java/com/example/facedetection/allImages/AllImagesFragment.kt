@@ -35,7 +35,14 @@ class AllImagesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initViews()
         initViewModel()
-        fetchData()
+        fetchDataIfNeeded()
+    }
+
+
+    private fun fetchDataIfNeeded() {
+        if (allImagesViewModel.imageListLiveData.value.isNullOrEmpty()) {
+            fetchData()
+        }
     }
 
     private fun fetchData() {
@@ -55,17 +62,34 @@ class AllImagesFragment : Fragment() {
         allImagesViewModel
             .getIsStartedDetectionLiveData()
             .observe(this, Observer { onStartedDetection(it) })
+
+        allImagesViewModel
+            .getNetworkStatusLiveData()
+            .observe(this, Observer { onNetworkStatusChange(it) })
+    }
+
+    private fun onNetworkStatusChange(networkStatus: Boolean) {
+        if (networkStatus) {
+            fetchDataIfNeeded()
+            return
+        }
+
+        resetBtn(true)
+    }
+
+    private fun resetBtn(isInDetectionMode: Boolean) {
+        btn_detect.isEnabled = isInDetectionMode
+        btn_detect.text =
+            if (isInDetectionMode) getString(R.string.detect) else getString(R.string.processing)
     }
 
     private fun onStartedDetection(isStartedDetection: Boolean) {
         if (isStartedDetection) return
 
-        btn_detect.isEnabled = true
-        btn_detect.text = getString(R.string.detect)
+        resetBtn(true)
     }
 
     private fun onImagesReceived(imageList: List<ImageUiModel>) {
-
         adapter.data.addAll(imageList)
         adapter.notifyDataSetChanged()
     }
@@ -78,8 +102,7 @@ class AllImagesFragment : Fragment() {
 
     private fun setBtnDetect() {
         btn_detect.setOnClickListener {
-            btn_detect.isEnabled = false
-            btn_detect.text = getString(R.string.processing)
+            resetBtn(false)
             allImagesViewModel.startDetection(adapter.data)
         }
     }

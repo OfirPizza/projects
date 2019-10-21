@@ -19,6 +19,7 @@ class DataManager {
 
     private lateinit var disposable: Disposable
     val isConvertingImagesLiveData = MutableLiveData<Boolean>()
+
     companion object {
         val INSTANCE = DataManager()
     }
@@ -40,7 +41,10 @@ class DataManager {
                     startDetection(bitmapList)
                     disposable.dispose()
                 },
-                onError = { onFailed(it.message) },
+                onError = {
+                    onFailed(it.message)
+                    disposable.dispose()
+                },
                 onNext = { bitmapList.add(it) }
             )
     }
@@ -57,6 +61,7 @@ class DataManager {
 
     private fun onFailed(message: String?) {
         Log.e(TAG, message.toString())
+        isConvertingImagesLiveData.postValue(false)
     }
 
     private fun postFinishedConvertingImages() {

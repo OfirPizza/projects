@@ -16,6 +16,7 @@ class FaceDetectorManager {
     private val TAG = FaceDetectorManager::class.java.simpleName
     val imagesWithFacesLiveData = MutableLiveData<List<Bitmap>>()
     val imagesWithoutFacesLiveData = MutableLiveData<List<Bitmap>>()
+    val totalImagesProcessedLiveData = MutableLiveData<Int>()
     val isStartedDetectionLiveData = MutableLiveData<Boolean>()
 
     companion object {
@@ -54,8 +55,14 @@ class FaceDetectorManager {
             }
         }
 
+        postTotalProcessedImages(bitmapList.size)
         postResults(imgWithFace, imgWithoutFace)
         postFinishedDetection()
+
+    }
+
+    private fun postTotalProcessedImages(numOfPicturs: Int) {
+        totalImagesProcessedLiveData.postValue(numOfPicturs)
 
     }
 

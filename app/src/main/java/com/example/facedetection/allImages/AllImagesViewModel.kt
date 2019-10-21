@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.example.facedetection.allImages.model.ImageUiModel
 import com.example.facedetection.managers.DataManager
 import com.example.facedetection.managers.FaceDetectorManager
+import com.example.facedetection.network.NetworkManager
 import com.example.facedetection.network.model.ImageResponse
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
@@ -48,6 +49,10 @@ class AllImagesViewModel : ViewModel() {
     override fun onCleared() {
         super.onCleared()
         disposable.dispose()
+    }
+
+    fun getNetworkStatusLiveData(): MutableLiveData<Boolean> {
+        return NetworkManager.INSTANCE.isNetworkAvailable
     }
 
     fun startDetection(data: ArrayList<ImageUiModel>) {
