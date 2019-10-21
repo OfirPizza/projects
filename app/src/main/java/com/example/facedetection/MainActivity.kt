@@ -1,11 +1,14 @@
 package com.example.facedetection
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import com.example.facedetection.dialog.ResultsDialogFragment
+import com.example.facedetection.notification.ResultsService
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -25,16 +28,45 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setObservers() {
-        mainActivityViewModel.getDetectionStatusLiveData().observe(this, Observer { onDetectionStatusChanged(it)})
+        mainActivityViewModel.getDetectionStatusLiveData()
+            .observe(this, Observer { onDetectionStatusChanged(it) })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        removeNotification()
+
+    }
+
+    private fun removeNotification() {
+        val intent = Intent(this, ResultsService::class.java)
+        stopService(intent)
     }
 
     private fun onDetectionStatusChanged(isStartDetection: Boolean) {
-        if (!isStartDetection){
+        if (!isStartDetection) {
             showDialog()
         }
-
-
     }
+
+
+    override fun onPause() {
+        super.onPause()
+        showNotificationIfNeeded()
+    }
+
+    private fun showNotificationIfNeeded() {
+        if (mainActivityViewModel.needToShowNotification()) {
+            showNotification()
+        }
+    }
+
+    private fun showNotification() {
+
+        val intent = Intent(this, ResultsService::class.java)
+        ContextCompat.startForegroundService(this, intent)
+    }
+
 
     private fun initBottomNavigationController() {
         this.bottom_navigation_view.setOnNavigationItemSelectedListener { navigate(it.itemId) }

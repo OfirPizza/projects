@@ -2,6 +2,7 @@ package com.example.facedetection.managers
 
 import android.graphics.Bitmap
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import com.example.facedetection.network.NetworkManager
 import com.example.facedetection.network.model.ImageResponse
 import io.reactivex.Observable
@@ -17,7 +18,7 @@ class DataManager {
     private val TAG = DataManager::class.java.simpleName
 
     private lateinit var disposable: Disposable
-
+    val isConvertingImagesLiveData = MutableLiveData<Boolean>()
     companion object {
         val INSTANCE = DataManager()
     }
@@ -29,6 +30,7 @@ class DataManager {
 
 
     fun detectImages(imgUrlList: List<String>) {
+        postConvertingImages()
         val bitmapList = arrayListOf<Bitmap>()
         disposable = imgUrlList.toObservable()
             .flatMap { i -> Observable.just(getImageAsBitmap(i)) }
@@ -44,6 +46,7 @@ class DataManager {
     }
 
     private fun startDetection(bitmapList: ArrayList<Bitmap>) {
+        postFinishedConvertingImages()
         FaceDetectorManager.INSTANCE.startDetection(bitmapList)
     }
 
@@ -54,6 +57,17 @@ class DataManager {
 
     private fun onFailed(message: String?) {
         Log.e(TAG, message.toString())
+    }
+
+    private fun postFinishedConvertingImages() {
+        Log.d(TAG, "FinishedConvertingImages")
+        isConvertingImagesLiveData.postValue(false)
+
+    }
+
+    private fun postConvertingImages() {
+        Log.d(TAG, "StartConvertingImages")
+        isConvertingImagesLiveData.postValue(true)
     }
 
 }
